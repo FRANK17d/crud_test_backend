@@ -9,6 +9,7 @@ const connectAndSync = async () => {
     console.log('Modelos sincronizados');
   } catch (err) {
     console.error('Error DB', err);
+    throw err;
   }
 };
 
