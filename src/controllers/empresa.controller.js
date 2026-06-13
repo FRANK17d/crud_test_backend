@@ -1,4 +1,4 @@
-const { Empresa } = require('../models');
+const { Empresa, Empleado } = require('../models');
 
 const createEmpresa = async (req, res) => {
   try {
@@ -12,7 +12,7 @@ const createEmpresa = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const empresas = await Empresa.findAll();
+    const empresas = await Empresa.findAll({ order: [['id', 'ASC']] });
     res.json(empresas);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -21,7 +21,9 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   try {
-    const empresa = await Empresa.findByPk(req.params.id);
+    const empresa = await Empresa.findByPk(req.params.id, {
+      include: [{ model: Empleado, as: 'empleados' }]
+    });
     if (!empresa) return res.status(404).json({ error: 'No existe' });
     res.json(empresa);
   } catch (err) {
